@@ -3,6 +3,7 @@
 ########################################
 locals {
   # membershipディレクトリのtxtファイル名からグループ名を自動抽出
+  # Automatically derive group names from the .txt file names under the membership directory
   groups = [
     for file in fileset(local.membership_file_path, "*.txt") :
     trimsuffix(file, ".txt")
