@@ -21,8 +21,8 @@
   ファイルの中身はユーザー名（メールアドレスの`@`より前の部分）
 - `terraform/user/`: `user.txt` は Identity Store にユーザーを作成するためのメールアドレス一覧
 - `terraform/root/`: Terraformの定義を置くルートモジュール（`terraform init/validate`を実行する
-  場所）。`assignments.tf`, `users.tf`, `groups.tf`, `memberships.tf`, `variables.tf`,
-  `permissionsets.tf` を含む
+  場所）。`terraform.tf`, `assignments.tf`, `users.tf`, `groups.tf`, `memberships.tf`,
+  `variables.tf`, `permissionsets.tf` を含む
 
 ## Examples固有の差異（フレームワークとの違い）
 
