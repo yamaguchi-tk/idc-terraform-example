@@ -23,6 +23,13 @@ permission assignments of AWS Identity Center. It assumes an external Identity P
 (IdP) is already set up separately, and that users authenticate via SSO federated from
 that IdP. Setting up the IdP itself or its federation with Identity Center is out of scope.
 
+- AWS IAM Identity Center itself must already be enabled for your organization.
+- Like the framework, this sample provisions Identity Store users directly via Terraform
+  (`aws_identitystore_user`). If you base a real deployment on this sample, do not enable
+  automatic (SCIM) provisioning from your IdP into Identity Center — SCIM
+  auto-provisioning and Terraform-managed users conflict and can cause `terraform apply`
+  to fail.
+
 ## Directory layout
 
 ```
