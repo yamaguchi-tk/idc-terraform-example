@@ -24,8 +24,8 @@ into Terraform resources.
 - `terraform/user/`: `user.txt` is the list of email addresses used to create users in the
   Identity Store
 - `terraform/root/`: the root module holding the Terraform definitions (where
-  `terraform init/validate` is run). Includes `assignments.tf`, `users.tf`, `groups.tf`,
-  `memberships.tf`, `variables.tf`, and `permissionsets.tf`
+  `terraform init/validate` is run). Includes `terraform.tf`, `assignments.tf`, `users.tf`,
+  `groups.tf`, `memberships.tf`, `variables.tf`, and `permissionsets.tf`
 
 ## Differences specific to Examples (vs. the framework)
 
