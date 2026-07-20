@@ -1,58 +1,60 @@
 # idc-terraform-example
 
-[idc-terraform-framework](https://github.com/yamaguchi-tk/idc-terraform-framework) の
-list-driven な AWS Identity Center 管理の仕組みを、架空データで動かしたスタンドアロンの
-サンプルリポジトリです。フレームワークの Terraform コードを物理コピーしており、
-module 参照は行っていません。
+English | [日本語](README.ja.md)
 
-## このリポジトリについて
+A standalone sample repository that runs the list-driven AWS Identity Center management
+approach from [idc-terraform-framework](https://github.com/yamaguchi-tk/idc-terraform-framework)
+with fictional data. The Terraform code is physically copied from the framework; there is
+no module reference.
 
-- ここに含まれるアカウントID・Identity Store ID・メールアドレス・グループ名・
-  PermissionSet 名はすべて架空のものです（実在の組織・システムとは関係ありません）
-- `terraform plan` / `terraform apply` は実行できません。
-  `data "aws_ssoadmin_instances" "instance" {}` が実際の AWS Identity Center への
-  接続を要求するためです。あくまで構文・展開ロジックを確認するためのサンプルです
-- `terraform validate` / `terraform fmt` までは実行して確認できます
+## About this repository
 
-## ディレクトリ構成
+- All account IDs, Identity Store IDs, email addresses, group names, and PermissionSet
+  names included here are entirely fictional (unrelated to any real organization or system)
+- `terraform plan` / `terraform apply` cannot be run, because
+  `data "aws_ssoadmin_instances" "instance" {}` requires a connection to a real AWS Identity
+  Center. This is a sample intended only for checking syntax and expansion logic
+- `terraform validate` / `terraform fmt` can be run to verify the configuration
+
+## Directory layout
 
 ```
 terraform/
 ├── user/
-│   └── user.txt                          # 架空ユーザーのメールアドレス一覧（@example.com）
+│   └── user.txt                          # fictional user email addresses (@example.com)
 ├── membership/
 │   ├── platform-team.txt
 │   ├── sales-ops.txt
 │   └── security-readonly.txt
 ├── assignment/
-│   ├── 111111111111/                     # 架空アカウントID
+│   ├── 111111111111/                     # fictional account ID
 │   ├── 222222222222/
 │   └── 333333333333/
-└── root/                               # フレームワークから物理コピーしたTerraformエンジン
+└── root/                               # Terraform engine physically copied from the framework
     ├── terraform.tf
-    ├── variables.tf                      # identity_store_id は d-0000000000 をハードコード
+    ├── variables.tf                      # identity_store_id is hardcoded to d-0000000000
     ├── users.tf
     ├── groups.tf
     ├── memberships.tf
     ├── assignments.tf
-    └── permissionsets.tf                 # AWS管理ポリシー例 + inline policyを使うDeveloperAccess例
+    └── permissionsets.tf                 # AWS managed policy examples + a DeveloperAccess example using an inline policy
 ```
 
-## サンプルデータの構成
+## Sample data layout
 
-| グループ | メンバー |
+| Group | Members |
 |---|---|
 | platform-team | alice, bob, carol |
 | sales-ops | dave, erin |
 | security-readonly | frank, grace, heidi |
 
-| アカウントID | 割当内容 |
+| Account ID | Assignments |
 |---|---|
 | 111111111111 | AdministratorAccess: platform-team, ivan(USER) / ReadOnlyAccess: security-readonly |
 | 222222222222 | PowerUserAccess: platform-team, sales-ops / DeveloperAccess: platform-team / ReadOnlyAccess: judy(USER) |
 | 333333333333 | ReadOnlyAccess: sales-ops, security-readonly / DeveloperAccess: ivan, judy(USER) |
 
-## 動作確認方法
+## How to verify
 
 ```sh
 cd terraform/root
@@ -61,8 +63,8 @@ terraform validate
 terraform fmt -check -recursive
 ```
 
-仕組みの詳細は [idc-terraform-framework](https://github.com/yamaguchi-tk/idc-terraform-framework)
-の README / docs/architecture.md を参照してください。
+For details on how this works, see the README / docs/architecture.md in
+[idc-terraform-framework](https://github.com/yamaguchi-tk/idc-terraform-framework).
 
 ## License
 
