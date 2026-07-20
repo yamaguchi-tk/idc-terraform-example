@@ -16,6 +16,13 @@ no module reference.
   Center. This is a sample intended only for checking syntax and expansion logic
 - `terraform validate` / `terraform fmt` can be run to verify the configuration
 
+## Prerequisites
+
+Like the framework, this sample manages only the Identity Store (users and groups) and
+permission assignments of AWS Identity Center. It assumes an external Identity Provider
+(IdP) is already set up separately, and that users authenticate via SSO federated from
+that IdP. Setting up the IdP itself or its federation with Identity Center is out of scope.
+
 ## Directory layout
 
 ```

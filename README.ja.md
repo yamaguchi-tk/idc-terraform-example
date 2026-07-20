@@ -16,6 +16,13 @@ module 参照は行っていません。
   接続を要求するためです。あくまで構文・展開ロジックを確認するためのサンプルです
 - `terraform validate` / `terraform fmt` までは実行して確認できます
 
+## 前提条件
+
+フレームワークと同様、本サンプルが管理するのは AWS Identity Center の Identity Store
+（ユーザー・グループ）と権限割当のみです。外部の Identity Provider (IdP) が別途構築済みであり、
+その IdP からの SSO でユーザー認証を行うことを前提としています。IdP自体の構築や Identity Center
+との連携設定は本リポジトリのスコープ外です。
+
 ## ディレクトリ構成
 
 ```
