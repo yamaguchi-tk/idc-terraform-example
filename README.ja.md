@@ -105,6 +105,10 @@ terraform fmt -check -recursive
 仕組みの詳細は [idc-terraform-framework](https://github.com/yamaguchi-tk/idc-terraform-framework)
 の README / docs/architecture.md を参照してください。
 
+## Contributing
+
+バグ報告・質問・プルリクエストを歓迎します。[CONTRIBUTING.md](CONTRIBUTING.md)（英語）を参照してください。
+
 ## License
 
 Copyright 2026 yamaguchi-tk

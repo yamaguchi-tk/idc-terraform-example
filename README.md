@@ -107,6 +107,10 @@ terraform fmt -check -recursive
 For details on how this works, see the README / docs/architecture.md in
 [idc-terraform-framework](https://github.com/yamaguchi-tk/idc-terraform-framework).
 
+## Contributing
+
+Bug reports, questions, and pull requests are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md).
+
 ## License
 
 Copyright 2026 yamaguchi-tk
