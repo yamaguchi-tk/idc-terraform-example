@@ -34,15 +34,20 @@ module 参照は行っていません。
 ```
 terraform/
 ├── user/
-│   └── user.txt                          # 架空ユーザーのメールアドレス一覧（@example.com）
+│   ├── user.txt                          # 架空ユーザーのメールアドレス一覧（@example.com）
+│   └── dummy.tf                          # CI差分検知用のプレースホルダ（後述「CI/CD対応」参照）
 ├── membership/
 │   ├── platform-team.txt
 │   ├── sales-ops.txt
-│   └── security-readonly.txt
+│   ├── security-readonly.txt
+│   └── dummy.tf
 ├── assignment/
 │   ├── 111111111111/                     # 架空アカウントID
+│   │   └── dummy.tf
 │   ├── 222222222222/
+│   │   └── dummy.tf
 │   └── 333333333333/
+│       └── dummy.tf
 └── root/                               # フレームワークから物理コピーしたTerraformエンジン
     ├── terraform.tf
     ├── variables.tf                      # identity_store_id は d-0000000000 をハードコード
@@ -50,8 +55,29 @@ terraform/
     ├── groups.tf
     ├── memberships.tf
     ├── assignments.tf
+    ├── assignments_dummy.tf              # CI差分検知用のダミーmodule群（後述）
     └── permissionsets.tf                 # AWS管理ポリシー例 + inline policyを使うDeveloperAccess例
 ```
+
+## CI/CD対応（tfaction）
+
+本サンプルには、フレームワーク自体には無い工夫が1つ含まれています。`.txt`ファイルのみを
+持つ各ディレクトリ（`terraform/user/`, `terraform/membership/`,
+`terraform/assignment/<account_id>/`）に `dummy.tf` というプレースホルダを置き、
+`terraform/root/` 側（`users.tf`, `memberships.tf`, `assignments_dummy.tf`）に対応する
+`module` blockを用意しています。
+
+通常の `terraform plan`/`apply` にはこの仕組みは不要です。ファイル一覧は `.tf`ファイルの
+有無に関係なく `fileset()` で直接読み込まれるためです。この配線は、[tfaction](https://github.com/suzuki-shunsuke/tfaction)
+のような、変更ファイルをmodule依存関係経由でTerraformのターゲットに対応付けるdiffベースの
+CIツールのためだけに存在します。`.txt`ファイルのみのディレクトリはそれ自体がTerraform module
+ではないため、この配線が無いと、例えば `terraform/assignment/111111111111/` 配下の変更が
+`terraform/root` の `plan`/`apply` をトリガーすべき変更だとCIツールが認識できないことがあります。
+各 `dummy.tf` は何もしないダミー（`data "aws_ssoadmin_instances" "dummy" {}`）で、
+ディレクトリを有効なmodule sourceにするためだけに存在し、Terraform自体の動作には影響しません。
+
+フレームワークをforkして diffベースのCIツールを使わない場合、この仕組みは不要なので
+省略して構いません。`terraform plan`/`apply` の動作には影響しません。
 
 ## サンプルデータの構成
 

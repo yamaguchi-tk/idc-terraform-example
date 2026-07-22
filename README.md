@@ -35,15 +35,20 @@ that IdP. Setting up the IdP itself or its federation with Identity Center is ou
 ```
 terraform/
 ├── user/
-│   └── user.txt                          # fictional user email addresses (@example.com)
+│   ├── user.txt                          # fictional user email addresses (@example.com)
+│   └── dummy.tf                          # CI diff-detection placeholder (see "CI/CD compatibility" below)
 ├── membership/
 │   ├── platform-team.txt
 │   ├── sales-ops.txt
-│   └── security-readonly.txt
+│   ├── security-readonly.txt
+│   └── dummy.tf
 ├── assignment/
 │   ├── 111111111111/                     # fictional account ID
+│   │   └── dummy.tf
 │   ├── 222222222222/
+│   │   └── dummy.tf
 │   └── 333333333333/
+│       └── dummy.tf
 └── root/                               # Terraform engine physically copied from the framework
     ├── terraform.tf
     ├── variables.tf                      # identity_store_id is hardcoded to d-0000000000
@@ -51,8 +56,30 @@ terraform/
     ├── groups.tf
     ├── memberships.tf
     ├── assignments.tf
+    ├── assignments_dummy.tf              # dummy module wiring for CI diff-detection (see below)
     └── permissionsets.tf                 # AWS managed policy examples + a DeveloperAccess example using an inline policy
 ```
+
+## CI/CD compatibility (tfaction)
+
+This sample includes a small addition the framework itself does not have: a `dummy.tf`
+placeholder in every directory that contains only `.txt` files
+(`terraform/user/`, `terraform/membership/`, `terraform/assignment/<account_id>/`), plus a
+matching `module` block under `terraform/root/` for each of them (in `users.tf`,
+`memberships.tf`, and `assignments_dummy.tf`).
+
+Plain `terraform plan`/`apply` does not need this — the file lists are read directly via
+`fileset()` regardless of whether a `.tf` file exists alongside them. This wiring exists
+only for diff-based CI tools such as [tfaction](https://github.com/suzuki-shunsuke/tfaction),
+which resolve a changed file path to a Terraform target through module dependencies. A
+directory that contains only `.txt` files is not a Terraform module by itself, so without
+this wiring such a tool may not recognize that, say, a change under
+`terraform/assignment/111111111111/` should trigger a `plan`/`apply` of `terraform/root`.
+Each `dummy.tf` is a no-op (`data "aws_ssoadmin_instances" "dummy" {}`); it exists only to
+make the directory a valid module source, and it has no effect on Terraform itself.
+
+If you fork the framework and don't use a diff-based CI tool, you can skip this pattern
+entirely — it is not required for `terraform plan`/`apply` to work.
 
 ## Sample data layout
 
