@@ -74,3 +74,18 @@ resource "aws_identitystore_group_membership" "this" {
   group_id          = aws_identitystore_group.this[each.value.group_name].group_id
   member_id         = aws_identitystore_user.this[each.value.user_name].user_id
 }
+
+########################################
+# dummy module
+########################################
+# tfaction等、diffベースでターゲットディレクトリを検出するCIツールに
+# ../membership 配下の.txtファイル変更を検知させるためのダミーmodule。
+# Terraformの実行自体には影響しない。
+#
+# A dummy module so diff-based CI tools (e.g. tfaction) that resolve changed
+# files to Terraform targets via module dependencies can detect changes under
+# ../membership (which contains only .txt files, not a Terraform module by
+# itself). It has no effect on Terraform itself.
+module "dummy_membership" {
+  source = "../membership"
+}

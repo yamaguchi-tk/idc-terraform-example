@@ -25,7 +25,8 @@ into Terraform resources.
   Identity Store
 - `terraform/root/`: the root module holding the Terraform definitions (where
   `terraform init/validate` is run). Includes `terraform.tf`, `assignments.tf`, `users.tf`,
-  `groups.tf`, `memberships.tf`, `variables.tf`, and `permissionsets.tf`
+  `groups.tf`, `memberships.tf`, `variables.tf`, `permissionsets.tf`, and
+  `assignments_dummy.tf`
 
 ## Differences specific to Examples (vs. the framework)
 
@@ -57,6 +58,10 @@ connect to a real AWS Identity Center, the following points differ.
   `file_name` / `permission_set_arn` / `principal_type` mapping in `variables.tf`
 - Adding a new AWS account only requires creating a new directory under
   `terraform/assignment/`. `assignment_target_aws_accounts` in `variables.tf`
-  auto-discovers it via `fileset`
+  auto-discovers it via `fileset`. `terraform plan`/`apply` need nothing else; if you also
+  use a diff-based CI tool, add a `dummy.tf` in the new directory and a matching `module`
+  block in `assignments_dummy.tf` (see [README.md](../README.md#cicd-compatibility-tfaction))
 - This repository intentionally does not include CI/CD configuration (e.g. GitHub
-  Actions)
+  Actions). It does include a `dummy.tf` + `module` wiring pattern that makes the
+  `.txt`-only directories compatible with diff-based CI tools such as tfaction; see
+  [README.md](../README.md#cicd-compatibility-tfaction)

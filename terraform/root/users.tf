@@ -33,3 +33,18 @@ locals {
     for email in local.emails : regex("(^[^@]+)", email)[0] => email
   }
 }
+
+########################################
+# dummy module
+########################################
+# tfaction等、diffベースでターゲットディレクトリを検出するCIツールに
+# ../user 配下の.txtファイル変更を検知させるためのダミーmodule。
+# Terraformの実行自体には影響しない。
+#
+# A dummy module so diff-based CI tools (e.g. tfaction) that resolve changed
+# files to Terraform targets via module dependencies can detect changes under
+# ../user (which contains only .txt files, not a Terraform module by itself).
+# It has no effect on Terraform itself.
+module "dummy_user" {
+  source = "../user"
+}
